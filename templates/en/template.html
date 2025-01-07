@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />
     <title>QA Skills Matrix</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css" />
+    <script type="text/javascript" src="{{ static_path }}jquery.min.js"></script>
+    <script type="text/javascript" src="{{ static_path }}script.js"></script>
   </head>
   <body>
     <header>
       <div class="container">
         <div class="headerTextContainer">
           <a href="https://www.infopulse.com/">
-            <img alt="logo" class="logo" src="images/InfopulseLogo.png" />
+            <img alt="logo" class="logo" src="{{ static_path }}images/InfopulseLogo.png" />
           </a>
           <h1>QA Skills Matrix<span class="line">_</span></h1>
           <p>
@@ -72,7 +72,7 @@
       <div class="container">
         <div class="footerTextContainer">
           <a href="https://www.infopulse.com/">
-            <img alt="logo" class="logo" src="images/InfopulseLogo.png" />
+            <img alt="logo" class="logo" src="{{ static_path }}images/InfopulseLogo.png" />
           </a>
           <a
             class="footerLink"
