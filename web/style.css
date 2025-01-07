@@ -72,8 +72,8 @@ header .container {
 }
 
 .logo {
-  width: 96px;
-  height: auto;
+  width: auto;
+  height: 30px;
 }
 
 header .logo {
@@ -500,4 +500,38 @@ footer {
   .footerTextContainer a:first-of-type {
     margin: 0;
   }
+}
+
+.language-selector {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for visibility */
+  padding: 5px 10px; /* Spacing inside the selector */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 14px; /* Readable font size */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between flag and text */    
+}
+.language-selector .flag-icon {
+  width: 20px; /* Adjust size */
+  height: auto; /* Maintain aspect ratio */
+  display: inline-block;
+  vertical-align: middle;
+}
+.language-selector a {
+  color: #333; /* Dark text color */
+  text-decoration: none; /* Remove underlines */
+  margin: 0 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.language-selector a:hover {
+  color: #007BFF; /* Accent color for hover state */
+  text-decoration: underline; /* Highlight link on hover */    
 }
