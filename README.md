@@ -7,7 +7,7 @@ Soft skills are important as well, but they are not included in this matrix.
 ## How to use?
 You are welcome to use this matrix as reference in your 
 There are 2 options to use this matrix:
-1. Open in GitHub pages (recommended): https://infopulse.github.io/Tech-Skills-Matrix-QA
+1. Open in GitHub pages (recommended): https://qamania.github.io/Tech-Skills-Matrix-QA
 2. Check out every skill category in markdown files:
    - [Test Planning](matrix/01.%20planning.md) - Estimations, tasks prioritization, test documentation, test management, risk management
    - [Test Design](matrix/02.%20design.md) - Test case creation, test analysis, check list creating
