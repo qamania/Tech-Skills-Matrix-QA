@@ -1,7 +1,7 @@
 from jinja2 import Template
 import os
 
-LANGUAGES = ['en']
+LANGUAGES = ['en', 'uk']
 DEFAULT_LANGUAGE = 'en'
 TEMPLATE_BASE = 'templates'
 MATRIX_BASE = 'MATRIX'
