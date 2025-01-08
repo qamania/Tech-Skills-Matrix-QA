@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>QA Skills Matrix</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css" />
+    <script type="text/javascript" src="{{ static_path }}jquery.min.js"></script>
+    <script type="text/javascript" src="{{ static_path }}script.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="headerTextContainer">
+          <a href="https://qamania.org/">
+            <img alt="logo" class="logo" src="{{ static_path }}images/qamania_logo_name_sm.png" />
+          </a>
+          <h1>QA Skills Matrix<span class="line">_</span></h1>
+          <p>
+            Ця матриця спрямована на допомогу в оцінці навичок інженера з контролю якості в загальний і однозначний спосіб. 
+            Кожен наступний рівень професійної зрілості включає навички з попередніх рівнів. Матриця не включає soft skills. 
+            <a class="footerLink" href="https://infopulse.github.io/Tech-Skills-Matrix-AQA/">Навички автоматизації тестування</a> розглядаються на окремій сторінці.
+          </p>
+        </div>
+        <div class="coverImage"></div>
+      </div>
+    </header>
+    <main>
+      <div class="language-selector">
+        <a href="{{ static_path }}uk/index.html"><img src="{{ static_path }}images/ua.svg" class="flag-icon">Українська</a> | <a href="{{ static_path }}en/index.html"><img src="{{ static_path }}images/gb.svg" class="flag-icon">English</a>
+      </div>
+      <div class="container">
+        {% for file in data %}
+        <div class="tabs">
+          <div class="description">
+            <h2>
+              <span class="chapter-index">{{file['number']}}</span>{{file['header']}}<span class="line">_</span>
+            </h2>
+            <p>{{file['description']}}</p>
+          </div>
+          <div class="tabNav">
+            {% for index, level in levels %}
+            <div class="tabNavEl tn{{index}}" data="tab{{index}}">
+              {{level}}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="tabBox">
+            {% for index, level in levels %}
+            <div class="tabHead tabHead{{index}}" data="ab{{index}}">
+              {{level}}
+            </div>
+            <ul class="tabEl tab{{index}}">
+              {% for item in file['category'].get(level, []) %}
+              <li>
+                {{item.text}}
+                {% if item.subitems %}
+                <ul>
+                  {% for subitem in item.subitems %}
+                  <li>{{subitem}}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+    <footer>
+      <div class="container">
+        <div class="footerTextContainer">
+          <a href="https://www.infopulse.com/">
+            <img alt="logo" class="logo" src="{{ static_path }}images/InfopulseLogo.png" />
+          </a>
+          <a
+            class="footerLink"
+            href="https://github.com/qamania/Tech-Skills-Matrix-QA"
+            >Back to github project</a
+          >
+          <a class="footerLink" href="#">Roadmap</a>
+        </div>
+        <div class="divider"></div>
+        <p class="rightsReservedText">© 2023, Infopulse. All rights reserved</p>
+      </div>
+    </footer>
+  </body>
+</html>
