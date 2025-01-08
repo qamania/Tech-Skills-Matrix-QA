@@ -4,7 +4,7 @@ import os
 LANGUAGES = ['en', 'uk']
 DEFAULT_LANGUAGE = 'en'
 TEMPLATE_BASE = 'templates'
-MATRIX_BASE = 'MATRIX'
+MATRIX_BASE = 'matrix'
 OUTPUT_BASE = 'web'
 STATIC_PATH_DEFAULT = './'  # For default index.html
 STATIC_PATH_LANG = '../'  # For language-specific subfolders index.html
