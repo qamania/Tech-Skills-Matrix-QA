@@ -98,6 +98,18 @@ h1 + P {
   padding: 0;
 }
 
+/* Adding new styles for links in the header paragraph */
+h1 + p a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+h1 + p a:hover,
+h1 + p a:focus {
+  color: var(--color-secondary);
+}
+
 @media (min-width: 768px) {
   .headerTextContainer {
     padding: 0 46px;
