@@ -1,5 +1,6 @@
 from jinja2 import Template
 import os
+import hashlib
 
 LANGUAGES = ['en', 'uk']
 DEFAULT_LANGUAGE = 'en'
@@ -10,9 +11,16 @@ STATIC_PATH_DEFAULT = './'  # For default index.html
 STATIC_PATH_LANG = '../'  # For language-specific subfolders index.html
 
 
-def convert(file, num):
-    with open(file, encoding='utf-8') as file:  # Specify UTF-8 encoding
-        lines = file.readlines()
+def build_item_id(prefix, file_path, category, item_index, text, subitem_index=None):
+    seed = [os.path.basename(file_path), category, str(item_index), text]
+    if subitem_index is not None:
+        seed.append(str(subitem_index))
+    return prefix + hashlib.md5('|'.join(seed).encode('utf-8')).hexdigest()[:8]
+
+
+def convert(file_path, num):
+    with open(file_path, encoding='utf-8') as file_handle:
+        lines = file_handle.readlines()
 
     data = {'category': {}}
     category = ''
@@ -27,10 +35,21 @@ def convert(file, num):
             data['category'][category] = []
             current_list = data['category'][category]
         elif line.startswith('- '):
-            current_list.append({'text': line.strip('-').strip(), 'subitems': []})
+            text = line.strip('-').strip()
+            item_id = build_item_id('item_', file_path, category, len(current_list), text)
+            current_list.append({'text': text, 'id': item_id, 'subitems': []})
         elif line.startswith('  - '):
             if current_list:
-                current_list[-1]['subitems'].append(line.strip('  - ').strip())
+                subtext = line.strip('  - ').strip()
+                subitem_id = build_item_id(
+                    'subitem_',
+                    file_path,
+                    category,
+                    len(current_list) - 1,
+                    subtext,
+                    len(current_list[-1]['subitems'])
+                )
+                current_list[-1]['subitems'].append({'text': subtext, 'id': subitem_id})
         else:
             data['description'] = line.strip()
 

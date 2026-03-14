@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />
     <title>QA Skills Matrix</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css?v=14" />
     <script type="text/javascript" src="{{ static_path }}jquery.min.js"></script>
-    <script type="text/javascript" src="{{ static_path }}script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="{{ static_path }}script.js?v=11"></script>
   </head>
   <body>
     <header>
@@ -29,6 +31,11 @@
     <main>
       <div class="language-selector">
         <a href="{{ static_path }}uk/index.html"><img src="{{ static_path }}images/ua.svg" class="flag-icon">Українська</a> | <a href="{{ static_path }}en/index.html"><img src="{{ static_path }}images/gb.svg" class="flag-icon">English</a>
+        <button type="button" id="self-assess-btn" class="action-btn assess-btn">▶ Start Self-Assessment</button>
+        <div class="report-actions" id="report-actions" style="display:none;">
+          <button type="button" id="download-report" class="action-btn">Download PDF Report</button>
+          <button type="button" id="clear-progress" class="action-btn">Clear Progress</button>
+        </div>
       </div>
       <div class="container">
         {% for file in data %}
@@ -54,11 +61,39 @@
             <ul class="tabEl tab{{index}}">
               {% for item in file['category'].get(level, []) %}
               <li>
-                {{item.text}}
+                <div class="skill-row">
+                  <div class="skill-eval">
+                    <div class="segmented-control" data-skill-id="{{item.id}}">
+                      <input type="radio" id="{{item.id}}_none" name="{{item.id}}" value="none" checked>
+                      <label for="{{item.id}}_none" class="label-none" title="Not Known"></label>
+                      <input type="radio" id="{{item.id}}_partial" name="{{item.id}}" value="partial">
+                      <label for="{{item.id}}_partial" class="label-partial" title="Partially Known"></label>
+                      <input type="radio" id="{{item.id}}_mastered" name="{{item.id}}" value="mastered">
+                      <label for="{{item.id}}_mastered" class="label-mastered" title="Mastered"></label>
+                    </div>
+                  </div>
+                  <span class="bullet-icon"></span>
+                  <div class="skill-text">{{item.text}}</div>
+                </div>
                 {% if item.subitems %}
                 <ul>
                   {% for subitem in item.subitems %}
-                  <li>{{subitem}}</li>
+                  <li>
+                    <div class="skill-row subskill-row">
+                      <div class="skill-eval">
+                        <div class="segmented-control" data-skill-id="{{subitem.id}}">
+                          <input type="radio" id="{{subitem.id}}_none" name="{{subitem.id}}" value="none" checked>
+                          <label for="{{subitem.id}}_none" class="label-none" title="Not Known"></label>
+                          <input type="radio" id="{{subitem.id}}_partial" name="{{subitem.id}}" value="partial">
+                          <label for="{{subitem.id}}_partial" class="label-partial" title="Partially Known"></label>
+                          <input type="radio" id="{{subitem.id}}_mastered" name="{{subitem.id}}" value="mastered">
+                          <label for="{{subitem.id}}_mastered" class="label-mastered" title="Mastered"></label>
+                        </div>
+                      </div>
+                      <span class="bullet-icon"></span>
+                      <div class="skill-text">{{subitem.text}}</div>
+                    </div>
+                  </li>
                   {% endfor %}
                 </ul>
                 {% endif %}
