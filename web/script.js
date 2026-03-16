@@ -87,6 +87,27 @@ jQuery(document).ready(function($) {
     var $assessmentName = $('#assessment-name');
     var $assessmentTarget = $('#assessment-target-seniority');
 
+    function getSkillStorageKey(skillId) {
+        return 'skill_' + skillId;
+    }
+
+    function getLegacySkillStorageKeys($control) {
+        var rawLegacyIds = $control.attr('data-legacy-skill-ids') || '';
+        var currentSkillId = $control.data('skill-id');
+
+        return rawLegacyIds
+            .split(',')
+            .map(function(legacySkillId) {
+                return $.trim(legacySkillId);
+            })
+            .filter(function(legacySkillId, index, ids) {
+                return legacySkillId && legacySkillId !== currentSkillId && ids.indexOf(legacySkillId) === index;
+            })
+            .map(function(legacySkillId) {
+                return getSkillStorageKey(legacySkillId);
+            });
+    }
+
     function applyAssessmentMode(active) {
         if (active) {
             $('body').addClass('assessment-mode');
@@ -142,18 +163,46 @@ jQuery(document).ready(function($) {
 
     // 1. Load state from localStorage on page load
     $('.segmented-control').each(function() {
-        var skillId = $(this).data('skill-id');
-        var savedValue = localStorage.getItem('skill_' + skillId);
+        var $control = $(this);
+        var skillId = $control.data('skill-id');
+        var storageKey = getSkillStorageKey(skillId);
+        var legacyStorageKeys = getLegacySkillStorageKeys($control);
+        var savedValue = localStorage.getItem(storageKey);
+
+        if (!savedValue && legacyStorageKeys.length) {
+            legacyStorageKeys.some(function(legacyStorageKey) {
+                savedValue = localStorage.getItem(legacyStorageKey);
+                if (savedValue) {
+                    localStorage.setItem(storageKey, savedValue);
+                    return true;
+                }
+                return false;
+            });
+
+            if (savedValue) {
+                legacyStorageKeys.forEach(function(legacyStorageKey) {
+                    localStorage.removeItem(legacyStorageKey);
+                });
+            }
+        }
+
         if (savedValue) {
-            $(this).find('input[value="' + savedValue + '"]').prop('checked', true);
+            $control.find('input[value="' + savedValue + '"]').prop('checked', true);
         }
     });
 
     // 2. Save state to localStorage on change
     $('.segmented-control input[type="radio"]').on('change', function() {
-        var skillId = $(this).closest('.segmented-control').data('skill-id');
+        var $control = $(this).closest('.segmented-control');
+        var skillId = $control.data('skill-id');
         var val = $(this).val();
-        localStorage.setItem('skill_' + skillId, val);
+        var storageKey = getSkillStorageKey(skillId);
+        var legacyStorageKeys = getLegacySkillStorageKeys($control);
+
+        localStorage.setItem(storageKey, val);
+        legacyStorageKeys.forEach(function(legacyStorageKey) {
+            localStorage.removeItem(legacyStorageKey);
+        });
     });
 
     // 3. Clear Progress
@@ -161,8 +210,14 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         if (confirm(CLEAR_PROGRESS_TEXT)) {
             $('.segmented-control').each(function() {
-                var skillId = $(this).data('skill-id');
-                localStorage.removeItem('skill_' + skillId);
+                var $control = $(this);
+                var skillId = $control.data('skill-id');
+                var legacyStorageKeys = getLegacySkillStorageKeys($control);
+
+                localStorage.removeItem(getSkillStorageKey(skillId));
+                legacyStorageKeys.forEach(function(legacyStorageKey) {
+                    localStorage.removeItem(legacyStorageKey);
+                });
                 $(this).find('input[value="none"]').prop('checked', true);
             });
             localStorage.removeItem(ASSESSMENT_NAME_KEY);

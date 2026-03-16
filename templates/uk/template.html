@@ -9,7 +9,7 @@
     <script type="text/javascript" src="{{ static_path }}jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="text/javascript" src="{{ static_path }}script.js?v=12"></script>
+    <script type="text/javascript" src="{{ static_path }}script.js?v=13"></script>
   </head>
   <body>
     <header>
@@ -118,7 +118,7 @@
               <li>
                 <div class="skill-row">
                   <div class="skill-eval">
-                    <div class="segmented-control" data-skill-id="{{item.id}}">
+                    <div class="segmented-control" data-skill-id="{{item.id}}" data-legacy-skill-ids="{{ item.legacy_ids|join(',') }}">
                       <input type="radio" id="{{item.id}}_none" name="{{item.id}}" value="none" checked>
                       <label for="{{item.id}}_none" class="label-none" title="Невідомо"></label>
                       <input type="radio" id="{{item.id}}_partial" name="{{item.id}}" value="partial">
@@ -136,7 +136,7 @@
                   <li>
                     <div class="skill-row subskill-row">
                       <div class="skill-eval">
-                        <div class="segmented-control" data-skill-id="{{subitem.id}}">
+                        <div class="segmented-control" data-skill-id="{{subitem.id}}" data-legacy-skill-ids="{{ subitem.legacy_ids|join(',') }}">
                           <input type="radio" id="{{subitem.id}}_none" name="{{subitem.id}}" value="none" checked>
                           <label for="{{subitem.id}}_none" class="label-none" title="Невідомо"></label>
                           <input type="radio" id="{{subitem.id}}_partial" name="{{subitem.id}}" value="partial">
