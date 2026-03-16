@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />
     <title>QA Skills Matrix</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css?v=14" />
+    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css?v=15" />
     <script type="text/javascript" src="{{ static_path }}jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="text/javascript" src="{{ static_path }}script.js?v=11"></script>
+    <script type="text/javascript" src="{{ static_path }}script.js?v=12"></script>
   </head>
   <body>
     <header>
@@ -38,6 +38,61 @@
         </div>
       </div>
       <div class="container">
+        <section class="assessment-intro" id="assessment-intro" aria-label="Self-assessment tools">
+          <div class="assessment-card">
+            <div class="assessment-card-copy">
+              <p class="assessment-eyebrow">Self-assessment mode</p>
+              <h2>Capture context for this review</h2>
+              <p class="assessment-description">
+                Fill in your profile once, then use the matrix below and the color legend to keep your answers consistent.
+              </p>
+            </div>
+            <div class="assessment-card-grid">
+              <label class="assessment-field" for="assessment-name">
+                <span>Your name</span>
+                <input
+                  type="text"
+                  id="assessment-name"
+                  name="assessment-name"
+                  maxlength="80"
+                  autocomplete="name"
+                  placeholder="e.g. Alex Johnson"
+                >
+              </label>
+              <label class="assessment-field" for="assessment-target-seniority">
+                <span>Target seniority</span>
+                <select id="assessment-target-seniority" name="assessment-target-seniority">
+                  <option value="">Select target level</option>
+                  <option value="Trainee">Trainee</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Middle">Middle</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Expert">Expert</option>
+                </select>
+              </label>
+            </div>
+            <p class="assessment-note">
+              Personal data is stored only in your local browser storage on this device and is never sent anywhere by this page.
+            </p>
+          </div>
+          <div class="assessment-legend" aria-label="Legend for self-assessment values">
+            <div class="assessment-legend-title">Legend</div>
+            <div class="assessment-legend-items">
+              <div class="assessment-legend-item">
+                <span class="legend-swatch legend-swatch-none" aria-hidden="true"></span>
+                <span>Not known yet</span>
+              </div>
+              <div class="assessment-legend-item">
+                <span class="legend-swatch legend-swatch-partial" aria-hidden="true"></span>
+                <span>Partially known</span>
+              </div>
+              <div class="assessment-legend-item">
+                <span class="legend-swatch legend-swatch-mastered" aria-hidden="true"></span>
+                <span>Mastered confidently</span>
+              </div>
+            </div>
+          </div>
+        </section>
         {% for file in data %}
         <div class="tabs">
           <div class="description">

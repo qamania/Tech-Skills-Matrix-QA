@@ -533,6 +533,7 @@ footer {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px; /* Space between flag and text */    
 }
 .language-selector .flag-icon {
@@ -555,6 +556,141 @@ footer {
 }
 
 /* Self-Evaluation Styles */
+.assessment-intro {
+  display: none;
+  margin: 36px 0 0;
+  gap: 18px;
+}
+
+body.assessment-mode .assessment-intro {
+  display: grid;
+}
+
+.assessment-card,
+.assessment-legend {
+  border: 1px solid rgba(17, 36, 59, 0.12);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f8fb 100%);
+  box-shadow: 0 14px 30px rgba(17, 36, 59, 0.08);
+}
+
+.assessment-card {
+  padding: 22px;
+}
+
+.assessment-card-copy {
+  margin-bottom: 18px;
+}
+
+.assessment-eyebrow {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.assessment-card h2 {
+  color: #10243b;
+  font: 700 28px/34px "Open Sans", sans-serif;
+}
+
+.assessment-description {
+  color: var(--color-text-secondary);
+  font: 400 15px/23px "Open Sans", sans-serif;
+  margin-top: 10px;
+  max-width: 740px;
+}
+
+.assessment-card-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.assessment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #10243b;
+  font-weight: 600;
+}
+
+.assessment-field input,
+.assessment-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid #c5ced8;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--color-text-primary);
+  font: 400 15px/22px "Open Sans", sans-serif;
+}
+
+.assessment-field input::placeholder {
+  color: #8592a0;
+}
+
+.assessment-note {
+  color: #5c6b7a;
+  font: 400 12px/18px "Open Sans", sans-serif;
+  margin-top: 14px;
+}
+
+.assessment-legend {
+  padding: 18px 22px;
+}
+
+.assessment-legend-title {
+  color: #10243b;
+  font: 700 16px/20px "Open Sans", sans-serif;
+  margin-bottom: 12px;
+}
+
+.assessment-legend-items {
+  display: grid;
+  gap: 10px;
+}
+
+.assessment-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-primary);
+  font: 600 14px/20px "Open Sans", sans-serif;
+}
+
+.legend-swatch {
+  width: 38px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.legend-swatch-none {
+  background: #ef4444;
+}
+
+.legend-swatch-partial {
+  background: #eab308;
+}
+
+.legend-swatch-mastered {
+  background: var(--color-primary);
+}
+
+@media (min-width: 992px) {
+  .assessment-intro {
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    align-items: start;
+  }
+
+  .assessment-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .skill-row {
   display: flex;
   align-items: center; /* vertically center all flex children */
@@ -677,11 +813,18 @@ body.assessment-mode .assess-btn:hover {
 
 .pdf-report-header {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 18px;
   margin: 0 0 28px;
   padding: 0 0 20px;
   border-bottom: 2px solid #d7dce1;
+}
+
+.pdf-report-header-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
 }
 
 .pdf-report-logo {
@@ -713,6 +856,61 @@ body.assessment-mode .assess-btn:hover {
   line-height: 1.15;
   white-space: nowrap;
   color: #10243b;
+}
+
+.pdf-report-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.pdf-report-meta {
+  border: 1px solid #d7dce1;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #f8fafc;
+}
+
+.pdf-report-meta-title {
+  color: #10243b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.pdf-report-meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.pdf-report-meta-label {
+  color: #52606d;
+  font-weight: 700;
+}
+
+.pdf-report-meta-value {
+  color: #10243b;
+  font-weight: 600;
+}
+
+.pdf-report-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pdf-report-legend-label {
+  color: #10243b;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .pdf-page {
@@ -819,5 +1017,17 @@ body.assessment-mode .assess-btn:hover {
 @media print {
   .language-selector, footer, header {
     display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .language-selector {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+  }
+
+  .assessment-intro {
+    margin-top: 96px;
   }
 }

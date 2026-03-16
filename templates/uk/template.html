@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />
     <title>QA Skills Matrix</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css?v=14" />
+    <link rel="stylesheet" type="text/css" href="{{ static_path }}style.css?v=15" />
     <script type="text/javascript" src="{{ static_path }}jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="text/javascript" src="{{ static_path }}script.js?v=11"></script>
+    <script type="text/javascript" src="{{ static_path }}script.js?v=12"></script>
   </head>
   <body>
     <header>
@@ -38,6 +38,61 @@
         </div>
       </div>
       <div class="container">
+        <section class="assessment-intro" id="assessment-intro" aria-label="Інструменти самооцінки">
+          <div class="assessment-card">
+            <div class="assessment-card-copy">
+              <p class="assessment-eyebrow">Режим самооцінки</p>
+              <h2>Додайте контекст перед оцінюванням</h2>
+              <p class="assessment-description">
+                Заповніть короткий профіль один раз, а далі оцінюйте матрицю нижче, орієнтуючись на легенду кольорів.
+              </p>
+            </div>
+            <div class="assessment-card-grid">
+              <label class="assessment-field" for="assessment-name">
+                <span>Ваше ім'я</span>
+                <input
+                  type="text"
+                  id="assessment-name"
+                  name="assessment-name"
+                  maxlength="80"
+                  autocomplete="name"
+                  placeholder="наприклад, Олексій Іваненко"
+                >
+              </label>
+              <label class="assessment-field" for="assessment-target-seniority">
+                <span>Цільовий seniority</span>
+                <select id="assessment-target-seniority" name="assessment-target-seniority">
+                  <option value="">Оберіть рівень</option>
+                  <option value="Trainee">Trainee</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Middle">Middle</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Expert">Expert</option>
+                </select>
+              </label>
+            </div>
+            <p class="assessment-note">
+              Персональні дані зберігаються лише локально у вашому браузері на цьому пристрої й не надсилаються цією сторінкою нікуди.
+            </p>
+          </div>
+          <div class="assessment-legend" aria-label="Легенда значень самооцінки">
+            <div class="assessment-legend-title">Легенда</div>
+            <div class="assessment-legend-items">
+              <div class="assessment-legend-item">
+                <span class="legend-swatch legend-swatch-none" aria-hidden="true"></span>
+                <span>Ще не знаю</span>
+              </div>
+              <div class="assessment-legend-item">
+                <span class="legend-swatch legend-swatch-partial" aria-hidden="true"></span>
+                <span>Знаю частково</span>
+              </div>
+              <div class="assessment-legend-item">
+                <span class="legend-swatch legend-swatch-mastered" aria-hidden="true"></span>
+                <span>Впевнено володію</span>
+              </div>
+            </div>
+          </div>
+        </section>
         {% for file in data %}
         <div class="tabs">
           <div class="description">

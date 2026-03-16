@@ -52,6 +52,8 @@ jQuery(window).resize(function () {
 jQuery(document).ready(function($) {
     // 0. Assessment mode toggle
     var isUkrainian = document.documentElement.lang === 'uk';
+    var ASSESSMENT_NAME_KEY = 'assessment-profile-name';
+    var ASSESSMENT_TARGET_KEY = 'assessment-profile-target';
     var ASSESS_TEXT_START = isUkrainian ? '▶ Почати самооцінку'      : '▶ Start Self-Assessment';
     var ASSESS_TEXT_STOP  = isUkrainian ? '■ Завершити самооцінку' : '■ End Self-Assessment';
     var CLEAR_PROGRESS_TEXT = isUkrainian
@@ -66,13 +68,24 @@ jQuery(document).ready(function($) {
     var PDF_FILENAME = isUkrainian
         ? 'QA_Skills_Matrix_Report_uk.pdf'
         : 'QA_Skills_Matrix_Report.pdf';
-    var PDF_REPORT_TITLE = 'QA Skills Matrix - Self Assessment Report';
+    var PDF_REPORT_TITLE = isUkrainian
+        ? 'QA Skills Matrix - Звіт самооцінки'
+        : 'QA Skills Matrix - Self Assessment Report';
+    var PDF_PROFILE_HEADING = isUkrainian ? 'Профіль оцінювання' : 'Assessment profile';
+    var PDF_LABEL_NAME = isUkrainian ? 'Імʼя' : 'Name';
+    var PDF_LABEL_TARGET = isUkrainian ? 'Цільовий seniority' : 'Target seniority';
+    var PDF_LEGEND_HEADING = isUkrainian ? 'Легенда' : 'Legend';
+    var PDF_LEGEND_NONE = isUkrainian ? 'Ще не знаю' : 'Not known yet';
+    var PDF_LEGEND_PARTIAL = isUkrainian ? 'Знаю частково' : 'Partially known';
+    var PDF_LEGEND_MASTERED = isUkrainian ? 'Впевнено володію' : 'Mastered confidently';
     var PDF_PAGE_WIDTH_PX = 800;
     var PDF_MARGINS_MM = { top: 10, right: 10, bottom: 18, left: 10 };
     var PDF_PRINTABLE_WIDTH_MM = 210 - PDF_MARGINS_MM.left - PDF_MARGINS_MM.right;
     var PDF_PRINTABLE_HEIGHT_MM = 297 - PDF_MARGINS_MM.top - PDF_MARGINS_MM.bottom;
     var PDF_PAGE_HEIGHT_PX = Math.floor((PDF_PAGE_WIDTH_PX * PDF_PRINTABLE_HEIGHT_MM) / PDF_PRINTABLE_WIDTH_MM);
     var pdfLogoAssetPromise = null;
+    var $assessmentName = $('#assessment-name');
+    var $assessmentTarget = $('#assessment-target-seniority');
 
     function applyAssessmentMode(active) {
         if (active) {
@@ -87,14 +100,44 @@ jQuery(document).ready(function($) {
         localStorage.setItem('assessment-mode', active ? '1' : '0');
     }
 
+    function syncAssessmentProfileFromStorage() {
+        $assessmentName.val(localStorage.getItem(ASSESSMENT_NAME_KEY) || '');
+        $assessmentTarget.val(localStorage.getItem(ASSESSMENT_TARGET_KEY) || '');
+    }
+
+    function getAssessmentProfile() {
+        var targetValue = $assessmentTarget.val();
+        var targetLabel = '';
+
+        if (targetValue) {
+            targetLabel = $assessmentTarget.find('option:selected').text();
+        }
+
+        return {
+            name: $.trim($assessmentName.val()),
+            targetValue: targetValue,
+            targetLabel: targetLabel
+        };
+    }
+
     // Restore assessment mode on load
     if (localStorage.getItem('assessment-mode') === '1') {
         applyAssessmentMode(true);
     }
 
+    syncAssessmentProfileFromStorage();
+
     $('#self-assess-btn').on('click', function() {
         var isActive = $('body').hasClass('assessment-mode');
         applyAssessmentMode(!isActive);
+    });
+
+    $assessmentName.on('input', function() {
+        localStorage.setItem(ASSESSMENT_NAME_KEY, $(this).val());
+    });
+
+    $assessmentTarget.on('change', function() {
+        localStorage.setItem(ASSESSMENT_TARGET_KEY, $(this).val());
     });
 
     // 1. Load state from localStorage on page load
@@ -122,6 +165,9 @@ jQuery(document).ready(function($) {
                 localStorage.removeItem('skill_' + skillId);
                 $(this).find('input[value="none"]').prop('checked', true);
             });
+            localStorage.removeItem(ASSESSMENT_NAME_KEY);
+            localStorage.removeItem(ASSESSMENT_TARGET_KEY);
+            syncAssessmentProfileFromStorage();
         }
     });
 
@@ -145,18 +191,80 @@ jQuery(document).ready(function($) {
         });
     }
 
+    function buildPdfLegend() {
+        var $legend = $('<div class="pdf-report-legend"></div>');
+        var legendItems = [
+            { value: 'none', label: PDF_LEGEND_NONE },
+            { value: 'partial', label: PDF_LEGEND_PARTIAL },
+            { value: 'mastered', label: PDF_LEGEND_MASTERED }
+        ];
+
+        $legend.append($('<div class="pdf-report-meta-title"></div>').text(PDF_LEGEND_HEADING));
+
+        legendItems.forEach(function(item) {
+            var $row = $('<div class="pdf-report-legend-item"></div>');
+            $row.append(buildPdfAssessment(item.value));
+            $row.append($('<span class="pdf-report-legend-label"></span>').text(item.label));
+            $legend.append($row);
+        });
+
+        return $legend;
+    }
+
+    function buildPdfProfile(profile) {
+        var $profile = $('<div class="pdf-report-meta pdf-report-profile"></div>');
+        var hasProfileData = false;
+
+        $profile.append($('<div class="pdf-report-meta-title"></div>').text(PDF_PROFILE_HEADING));
+
+        if (profile.name) {
+            hasProfileData = true;
+            $profile.append(
+                $('<div class="pdf-report-meta-row"></div>')
+                    .append($('<span class="pdf-report-meta-label"></span>').text(PDF_LABEL_NAME + ':'))
+                    .append($('<span class="pdf-report-meta-value"></span>').text(profile.name))
+            );
+        }
+
+        if (profile.targetLabel) {
+            hasProfileData = true;
+            $profile.append(
+                $('<div class="pdf-report-meta-row"></div>')
+                    .append($('<span class="pdf-report-meta-label"></span>').text(PDF_LABEL_TARGET + ':'))
+                    .append($('<span class="pdf-report-meta-value"></span>').text(profile.targetLabel))
+            );
+        }
+
+        return hasProfileData ? $profile : null;
+    }
+
     function buildPdfReportHeader() {
         var logoSrc = $('.headerTextContainer .logo').first().attr('src');
+        var profile = getAssessmentProfile();
         var $header = $('<div class="pdf-report-header"></div>');
+        var $headerTop = $('<div class="pdf-report-header-top"></div>');
         var $titleWrap = $('<div class="pdf-report-title-wrap"></div>');
+        var $headerMeta = $('<div class="pdf-report-meta-grid"></div>');
+        var $profileBlock = buildPdfProfile(profile);
 
         if (logoSrc) {
-            $header.append($('<img class="pdf-report-logo" alt="QAMania logo">').attr('src', logoSrc));
+            $headerTop.append($('<img class="pdf-report-logo" alt="QAMania logo">').attr('src', logoSrc));
         }
 
         $titleWrap.append('<div class="pdf-report-kicker">QAMania</div>');
         $titleWrap.append($('<h1 class="pdf-report-title"></h1>').text(PDF_REPORT_TITLE));
-        $header.append($titleWrap);
+        $headerTop.append($titleWrap);
+        $header.append($headerTop);
+
+        if ($profileBlock) {
+            $headerMeta.append($profileBlock);
+        }
+
+        $headerMeta.append(buildPdfLegend());
+
+        if ($headerMeta.children().length) {
+            $header.append($headerMeta);
+        }
 
         return $header;
     }
