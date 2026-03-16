@@ -18,13 +18,6 @@ def build_item_id(prefix, file_name, category_index, item_index, subitem_index=N
     return prefix + hashlib.md5('|'.join(seed).encode('utf-8')).hexdigest()[:8]
 
 
-def build_legacy_item_id(prefix, file_path, category, item_index, text, subitem_index=None):
-    seed = [os.path.basename(file_path), category, str(item_index), text]
-    if subitem_index is not None:
-        seed.append(str(subitem_index))
-    return prefix + hashlib.md5('|'.join(seed).encode('utf-8')).hexdigest()[:8]
-
-
 def convert(file_path, num):
     with open(file_path, encoding='utf-8') as file_handle:
         lines = file_handle.readlines()
@@ -45,19 +38,15 @@ def convert(file_path, num):
             data['category'][category] = []
             current_list = data['category'][category]
         elif line.startswith('- '):
-            text = line.strip('-').strip()
             item_index = len(current_list)
             item_id = build_item_id('item_', file_name, category_index, item_index)
-            legacy_item_id = build_legacy_item_id('item_', file_path, category, item_index, text)
             current_list.append({
-                'text': text,
+                'text': line.strip('-').strip(),
                 'id': item_id,
-                'legacy_id': legacy_item_id,
                 'subitems': []
             })
         elif line.startswith('  - '):
             if current_list:
-                subtext = line.strip('  - ').strip()
                 item_index = len(current_list) - 1
                 subitem_index = len(current_list[-1]['subitems'])
                 subitem_id = build_item_id(
@@ -67,31 +56,14 @@ def convert(file_path, num):
                     item_index,
                     subitem_index
                 )
-                legacy_subitem_id = build_legacy_item_id(
-                    'subitem_',
-                    file_path,
-                    category,
-                    item_index,
-                    subtext,
-                    subitem_index
-                )
                 current_list[-1]['subitems'].append({
-                    'text': subtext,
-                    'id': subitem_id,
-                    'legacy_id': legacy_subitem_id
+                    'text': line.strip('  - ').strip(),
+                    'id': subitem_id
                 })
         else:
             data['description'] = line.strip()
 
     return data
-
-
-def iter_skill_entries(data):
-    for items in data['category'].values():
-        for item in items:
-            yield item
-            for subitem in item['subitems']:
-                yield subitem
 
 
 def build_language_data(language):
@@ -109,22 +81,6 @@ def build_language_data(language):
     return data
 
 
-def attach_legacy_ids(all_data):
-    legacy_ids_by_stable_id = {}
-
-    for language_data in all_data.values():
-        for section in language_data:
-            for entry in iter_skill_entries(section):
-                legacy_ids_by_stable_id.setdefault(entry['id'], [])
-                if entry['legacy_id'] not in legacy_ids_by_stable_id[entry['id']]:
-                    legacy_ids_by_stable_id[entry['id']].append(entry['legacy_id'])
-
-    for language_data in all_data.values():
-        for section in language_data:
-            for entry in iter_skill_entries(section):
-                entry['legacy_ids'] = legacy_ids_by_stable_id[entry['id']]
-
-
 def generate_html_for_language(language, output_path, static_path, data):
     template_path = os.path.join(TEMPLATE_BASE, language, 'template.html')
     template = Template(open(template_path, encoding='utf-8').read())
@@ -137,7 +93,6 @@ def generate_html_for_language(language, output_path, static_path, data):
 
 if __name__ == '__main__':
     all_data = {lang: build_language_data(lang) for lang in LANGUAGES}
-    attach_legacy_ids(all_data)
 
     for lang in LANGUAGES:
         generate_html_for_language(lang, os.path.join(OUTPUT_BASE, lang), STATIC_PATH_LANG, all_data[lang])
