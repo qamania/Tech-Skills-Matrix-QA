@@ -1,3 +1,5 @@
 venv
 .idea
 index.html
+.DS_Store
+__pycache__/
