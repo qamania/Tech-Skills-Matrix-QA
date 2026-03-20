@@ -7,7 +7,7 @@ Soft skills are important as well, but they are not included in this matrix.
 ## How to use?
 You are welcome to use this matrix as reference in your 
 There are 2 options to use this matrix:
-1. Open in GitHub pages (recommended): https://qamania.github.io/Tech-Skills-Matrix-QA
+1. Open in GitHub pages (recommended): https://mikhailchub.github.io/Skills-Matrix-QE/
 2. Check out every skill category in markdown files:
    - [Test Planning](matrix/01.%20planning.md) - Estimations, tasks prioritization, test documentation, test management, risk management
    - [Test Design](matrix/02.%20design.md) - Test case creation, test analysis, check list creating
@@ -17,6 +17,8 @@ There are 2 options to use this matrix:
    - [Requirements Management](matrix/06.%20requirements.md) - Requirements analysis, testing of requirements
    - [Working with the Data](matrix/07.%20data.md) - Data structures, Data testing, Excel, Data analysis
    - [Tech skills](matrix/08.%20tech.md) - General tech knowledge in: Webservices, Web technologies, client-server apps, OS, UNIX, SQL, APIs
+   - [Testing with AI](matrix/en/09.%20testing_with_ai.md) - Using AI tools, test generation, copilot, agentic testing
+   - [Testing of AI](matrix/en/10.%20testing_of_ai.md) - Evaluating LLMs, ML models, RAG systems, biases, hallucinations
 
 - Review required skills for each level and category
 - Give yourself honest feedback if you know well enough each skill (In future releases we will provide a self-assessment tool)
@@ -43,7 +45,7 @@ You are welcome to:
 
 
 ## Matrix maintenance plan
-- We plan to add AI usage category to the matrix
+
 - We plan to review and update the matrix regularly, including the review of PR and issues
 - We plan to add a self-assessment tool to the matrix
 - We plan to add a roadmap for QA engineers

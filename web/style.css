@@ -327,12 +327,19 @@ h1 + p a:focus {
 }
 
 .tabEl li {
-  list-style-position: inside;
-  list-style-image: url("images/bullet.svg");
+  list-style: none;
+  margin-left: 0;
+  position: relative;
+  padding-left: 20px;
   color: var(--color-text-secondary);
   font-size: 16px;
-  line-height: 22px;
+  line-height: 24px;
   margin-bottom: 8px;
+}
+
+.tabEl > li::before,
+.tabEl ul li::before {
+  display: none; /* bullet now rendered via .bullet-icon span */
 }
 
 /* New styles for nested lists */
@@ -341,7 +348,6 @@ h1 + p a:focus {
 }
 
 .tabEl ul li {
-  list-style-image: url("images/bullet.svg");
   margin-bottom: 4px;
   margin-top: 8px;
 }
@@ -527,6 +533,7 @@ footer {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px; /* Space between flag and text */    
 }
 .language-selector .flag-icon {
@@ -546,4 +553,481 @@ footer {
 .language-selector a:hover {
   color: #007BFF; /* Accent color for hover state */
   text-decoration: underline; /* Highlight link on hover */    
+}
+
+/* Self-Evaluation Styles */
+.assessment-intro {
+  display: none;
+  margin: 36px 0 0;
+  gap: 18px;
+}
+
+body.assessment-mode .assessment-intro {
+  display: grid;
+}
+
+.assessment-card,
+.assessment-legend {
+  border: 1px solid rgba(17, 36, 59, 0.12);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f8fb 100%);
+  box-shadow: 0 14px 30px rgba(17, 36, 59, 0.08);
+}
+
+.assessment-card {
+  padding: 22px;
+}
+
+.assessment-card-copy {
+  margin-bottom: 18px;
+}
+
+.assessment-eyebrow {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.assessment-card h2 {
+  color: #10243b;
+  font: 700 28px/34px "Open Sans", sans-serif;
+}
+
+.assessment-description {
+  color: var(--color-text-secondary);
+  font: 400 15px/23px "Open Sans", sans-serif;
+  margin-top: 10px;
+  max-width: 740px;
+}
+
+.assessment-card-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.assessment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #10243b;
+  font-weight: 600;
+}
+
+.assessment-field input,
+.assessment-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid #c5ced8;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--color-text-primary);
+  font: 400 15px/22px "Open Sans", sans-serif;
+}
+
+.assessment-field input::placeholder {
+  color: #8592a0;
+}
+
+.assessment-note {
+  color: #5c6b7a;
+  font: 400 12px/18px "Open Sans", sans-serif;
+  margin-top: 14px;
+}
+
+.assessment-legend {
+  padding: 18px 22px;
+}
+
+.assessment-legend-title {
+  color: #10243b;
+  font: 700 16px/20px "Open Sans", sans-serif;
+  margin-bottom: 12px;
+}
+
+.assessment-legend-items {
+  display: grid;
+  gap: 10px;
+}
+
+.assessment-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-primary);
+  font: 600 14px/20px "Open Sans", sans-serif;
+}
+
+.legend-swatch {
+  width: 38px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.legend-swatch-none {
+  background: #ef4444;
+}
+
+.legend-swatch-partial {
+  background: #eab308;
+}
+
+.legend-swatch-mastered {
+  background: var(--color-primary);
+}
+
+@media (min-width: 992px) {
+  .assessment-intro {
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    align-items: start;
+  }
+
+  .assessment-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.skill-row {
+  display: flex;
+  align-items: center; /* vertically center all flex children */
+}
+
+/* Bullet icon as inline flex child */
+.bullet-icon {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+  background: url("images/bullet.svg") no-repeat center center;
+  background-size: contain;
+}
+
+/* skill-eval hidden by default; visible in assessment mode */
+.skill-eval {
+  display: none;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+body.assessment-mode .skill-eval {
+  display: flex;
+}
+
+.skill-text {
+  flex-grow: 1;
+}
+
+/* 3-State Toggle / Segmented Control */
+.segmented-control {
+  display: flex;
+  background-color: var(--color-grey2);
+  border-radius: 4px;
+  overflow: hidden;
+  height: 24px;
+}
+
+.segmented-control input[type="radio"] {
+  display: none;
+}
+
+.segmented-control label {
+  cursor: pointer;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.segmented-control .label-none { width: 14px; }
+.segmented-control .label-partial { width: 14px; }
+.segmented-control .label-mastered { width: 14px; }
+
+/* Inactive states / colors */
+.segmented-control .label-none:hover { background-color: #fca5a5; }
+.segmented-control .label-partial:hover { background-color: #fde047; }
+.segmented-control .label-mastered:hover { background-color: #86efac; }
+
+/* Active states */
+.segmented-control input[value="none"]:checked + .label-none { background-color: #ef4444; }
+.segmented-control input[value="partial"]:checked + .label-partial { background-color: #eab308; }
+.segmented-control input[value="mastered"]:checked + .label-mastered { background-color: var(--color-primary); }
+
+/* Report Actions */
+.report-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-btn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+  font-weight: 600;
+}
+
+.action-btn:hover {
+  background-color: var(--color-secondary);
+}
+
+.assess-btn {
+  background-color: #2563eb;
+}
+
+.assess-btn:hover {
+  background-color: #1d4ed8;
+}
+
+body.assessment-mode .assess-btn {
+  background-color: #dc2626;
+}
+
+body.assessment-mode .assess-btn:hover {
+  background-color: #b91c1c;
+}
+
+#clear-progress {
+  background-color: var(--color-text-secondary);
+}
+#clear-progress:hover {
+  background-color: #333;
+}
+
+/* PDF Generation View Adjustments (Cloning 2.0) */
+.pdf-export-container {
+  padding: 20px;
+  background: white;
+  color: #1d1e1e;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+}
+
+.pdf-report-header {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0 0 28px;
+  padding: 0 0 20px;
+  border-bottom: 2px solid #d7dce1;
+}
+
+.pdf-report-header-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.pdf-report-logo {
+  width: 150px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.pdf-report-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pdf-report-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.pdf-report-title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: #10243b;
+}
+
+.pdf-report-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.pdf-report-meta {
+  border: 1px solid #d7dce1;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #f8fafc;
+}
+
+.pdf-report-meta-title {
+  color: #10243b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.pdf-report-meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.pdf-report-meta-label {
+  color: #52606d;
+  font-weight: 700;
+}
+
+.pdf-report-meta-value {
+  color: #10243b;
+  font-weight: 600;
+}
+
+.pdf-report-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pdf-report-legend-label {
+  color: #10243b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pdf-page {
+  overflow: hidden;
+  background: white;
+}
+
+.pdf-page-content {
+  height: 100%;
+}
+
+.pdf-section-block {
+  margin: 0 0 28px;
+}
+
+.pdf-header-block {
+  margin-bottom: 32px;
+}
+
+.pdf-section-block:last-child {
+  margin-bottom: 0;
+}
+
+.pdf-export-container .tabs {
+  margin: 0 0 40px 0 !important;
+  display: block !important;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .tabNav {
+  display: none !important;
+}
+
+.pdf-export-container .description {
+  padding-bottom: 15px;
+}
+
+.pdf-export-container .description h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.pdf-export-container .description p {
+  display: none; /* Hide descriptions to save space */
+}
+
+.pdf-export-container .tabHead {
+  display: flex !important;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #1d1e1e;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.pdf-export-container .tabEl {
+  display: block !important;
+  padding: 15px 30px;
+  border: 1px solid #1d1e1e;
+  border-top: none;
+  background: white !important;
+}
+
+.pdf-export-container .skill-row {
+  margin-bottom: 8px;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .skill-eval {
+  display: flex !important; /* Force toggles to be visible in PDF */
+}
+
+.pdf-export-container .segmented-control {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.pdf-export-container .pdf-segment {
+  width: 14px;
+  height: 24px;
+  background-color: #d1d5db;
+}
+
+.pdf-export-container .pdf-segment + .pdf-segment {
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.pdf-export-container .segmented-control[data-assessment="none"] .pdf-segment-none {
+  background-color: #ef4444;
+}
+
+.pdf-export-container .segmented-control[data-assessment="partial"] .pdf-segment-partial {
+  background-color: #eab308;
+}
+
+.pdf-export-container .segmented-control[data-assessment="mastered"] .pdf-segment-mastered {
+  background-color: var(--color-primary);
+}
+
+@media print {
+  .language-selector, footer, header {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .language-selector {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+  }
+
+  .assessment-intro {
+    margin-top: 96px;
+  }
 }
