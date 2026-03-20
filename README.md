@@ -1,13 +1,13 @@
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
 
-# Tech Skills Matrix
+# QE Tech Skills Matrix
 Skills matrix to evaluate **tech** skills of QA engineers.  
 Soft skills are important as well, but they are not included in this matrix.
 
 ## How to use?
 You are welcome to use this matrix as reference in your 
 There are 2 options to use this matrix:
-1. Open in GitHub pages (recommended): https://mikhailchub.github.io/Skills-Matrix-QE/
+1. Open in GitHub pages (recommended): [https://qamania.github.io/Tech-Skills-Matrix-QE](https://qamania.github.io/Tech-Skills-Matrix-QA)
 2. Check out every skill category in markdown files:
    - [Test Planning](matrix/01.%20planning.md) - Estimations, tasks prioritization, test documentation, test management, risk management
    - [Test Design](matrix/02.%20design.md) - Test case creation, test analysis, check list creating
@@ -46,6 +46,6 @@ You are welcome to:
 
 ## Matrix maintenance plan
 
-- We plan to review and update the matrix regularly, including the review of PR and issues
-- We plan to add a self-assessment tool to the matrix
-- We plan to add a roadmap for QA engineers
+- [ ] We plan to review and update the matrix regularly, including the review of PR and issues
+- [x] We plan to add a self-assessment tool to the matrix
+- [ ] We plan to add a roadmap for Quality Engineers
