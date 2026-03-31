@@ -44,6 +44,9 @@ You are welcome to:
 - create pull-requests with your changes
 
 
+## Acknowledgments
+This project was originally created at [Infopulse](https://www.infopulse.com/) and is now maintained by [QAMania](https://qamania.org/).
+
 ## Matrix maintenance plan
 
 - [ ] We plan to review and update the matrix regularly, including the review of PR and issues
