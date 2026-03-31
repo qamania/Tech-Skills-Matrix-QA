@@ -40,7 +40,7 @@ and gain new knowledge.
 
 ## How to contribute?
 You are welcome to:
-- leave your comments and suggestions in [Issues](https://github.com/infopulse/Tech-Skills-Matrix-QA/issues)
+- leave your comments and suggestions in [Issues](https://github.com/qamania/Tech-Skills-Matrix-QA/issues)
 - create pull-requests with your changes
 
 
