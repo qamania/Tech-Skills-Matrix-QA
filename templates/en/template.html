@@ -79,15 +79,35 @@
             <div class="assessment-legend-title">Legend</div>
             <div class="assessment-legend-items">
               <div class="assessment-legend-item">
-                <span class="legend-swatch legend-swatch-none" aria-hidden="true"></span>
+                <span class="legend-assessment" data-assessment="not-evaluated" aria-hidden="true">
+                  <span class="legend-segment legend-segment-none"></span>
+                  <span class="legend-segment legend-segment-partial"></span>
+                  <span class="legend-segment legend-segment-mastered"></span>
+                </span>
+                <span>Not evaluated</span>
+              </div>
+              <div class="assessment-legend-item">
+                <span class="legend-assessment" data-assessment="none" aria-hidden="true">
+                  <span class="legend-segment legend-segment-none"></span>
+                  <span class="legend-segment legend-segment-partial"></span>
+                  <span class="legend-segment legend-segment-mastered"></span>
+                </span>
                 <span>Not known yet</span>
               </div>
               <div class="assessment-legend-item">
-                <span class="legend-swatch legend-swatch-partial" aria-hidden="true"></span>
+                <span class="legend-assessment" data-assessment="partial" aria-hidden="true">
+                  <span class="legend-segment legend-segment-none"></span>
+                  <span class="legend-segment legend-segment-partial"></span>
+                  <span class="legend-segment legend-segment-mastered"></span>
+                </span>
                 <span>Partially known</span>
               </div>
               <div class="assessment-legend-item">
-                <span class="legend-swatch legend-swatch-mastered" aria-hidden="true"></span>
+                <span class="legend-assessment" data-assessment="mastered" aria-hidden="true">
+                  <span class="legend-segment legend-segment-none"></span>
+                  <span class="legend-segment legend-segment-partial"></span>
+                  <span class="legend-segment legend-segment-mastered"></span>
+                </span>
                 <span>Mastered confidently</span>
               </div>
             </div>
@@ -119,7 +139,7 @@
                 <div class="skill-row">
                   <div class="skill-eval">
                     <div class="segmented-control" data-skill-id="{{item.id}}">
-                      <input type="radio" id="{{item.id}}_none" name="{{item.id}}" value="none" checked>
+                      <input type="radio" id="{{item.id}}_none" name="{{item.id}}" value="none">
                       <label for="{{item.id}}_none" class="label-none" title="Not Known"></label>
                       <input type="radio" id="{{item.id}}_partial" name="{{item.id}}" value="partial">
                       <label for="{{item.id}}_partial" class="label-partial" title="Partially Known"></label>
@@ -137,7 +157,7 @@
                     <div class="skill-row subskill-row">
                       <div class="skill-eval">
                         <div class="segmented-control" data-skill-id="{{subitem.id}}">
-                          <input type="radio" id="{{subitem.id}}_none" name="{{subitem.id}}" value="none" checked>
+                          <input type="radio" id="{{subitem.id}}_none" name="{{subitem.id}}" value="none">
                           <label for="{{subitem.id}}_none" class="label-none" title="Not Known"></label>
                           <input type="radio" id="{{subitem.id}}_partial" name="{{subitem.id}}" value="partial">
                           <label for="{{subitem.id}}_partial" class="label-partial" title="Partially Known"></label>

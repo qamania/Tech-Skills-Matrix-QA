@@ -661,23 +661,35 @@ body.assessment-mode .assessment-intro {
   font: 600 14px/20px "Open Sans", sans-serif;
 }
 
-.legend-swatch {
-  width: 38px;
-  height: 14px;
-  border-radius: 999px;
-  display: inline-block;
+.legend-assessment {
+  display: flex;
+  width: 42px;
+  height: 24px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.legend-swatch-none {
-  background: #ef4444;
+.legend-segment {
+  width: 14px;
+  height: 24px;
+  background-color: #d1d5db;
 }
 
-.legend-swatch-partial {
-  background: #eab308;
+.legend-segment + .legend-segment {
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-.legend-swatch-mastered {
-  background: var(--color-primary);
+.legend-assessment[data-assessment="none"] .legend-segment-none {
+  background-color: #ef4444;
+}
+
+.legend-assessment[data-assessment="partial"] .legend-segment-partial {
+  background-color: #eab308;
+}
+
+.legend-assessment[data-assessment="mastered"] .legend-segment-mastered {
+  background-color: var(--color-primary);
 }
 
 @media (min-width: 992px) {
@@ -740,7 +752,12 @@ body.assessment-mode .skill-eval {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #d1d5db;
   transition: background-color 0.2s;
+}
+
+.segmented-control label + input + label {
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .segmented-control .label-none { width: 14px; }
@@ -988,8 +1005,8 @@ body.assessment-mode .assess-btn:hover {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
-  print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .pdf-export-container .pdf-segment {

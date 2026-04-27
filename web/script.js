@@ -75,9 +75,11 @@ jQuery(document).ready(function($) {
     var PDF_LABEL_NAME = isUkrainian ? 'Імʼя' : 'Name';
     var PDF_LABEL_TARGET = isUkrainian ? 'Цільовий seniority' : 'Target seniority';
     var PDF_LEGEND_HEADING = isUkrainian ? 'Легенда' : 'Legend';
+    var PDF_LEGEND_NOT_EVALUATED = isUkrainian ? 'Не оцінено' : 'Not evaluated';
     var PDF_LEGEND_NONE = isUkrainian ? 'Ще не знаю' : 'Not known yet';
     var PDF_LEGEND_PARTIAL = isUkrainian ? 'Знаю частково' : 'Partially known';
     var PDF_LEGEND_MASTERED = isUkrainian ? 'Впевнено володію' : 'Mastered confidently';
+    var VALID_ASSESSMENTS = { none: true, partial: true, mastered: true };
     var PDF_PAGE_WIDTH_PX = 800;
     var PDF_MARGINS_MM = { top: 10, right: 10, bottom: 18, left: 10 };
     var PDF_PRINTABLE_WIDTH_MM = 210 - PDF_MARGINS_MM.left - PDF_MARGINS_MM.right;
@@ -150,9 +152,49 @@ jQuery(document).ready(function($) {
         var skillId = $control.data('skill-id');
         var savedValue = localStorage.getItem(getSkillStorageKey(skillId));
 
-        if (savedValue) {
+        if (VALID_ASSESSMENTS[savedValue]) {
             $control.find('input[value="' + savedValue + '"]').prop('checked', true);
         }
+    });
+
+    function clearSelectedAssessment($input) {
+        var $control = $input.closest('.segmented-control');
+        $input.prop('checked', false);
+        localStorage.removeItem(getSkillStorageKey($control.data('skill-id')));
+        $input.data('was-checked', false);
+    }
+
+    $('.segmented-control input[type="radio"]').on('mousedown touchstart', function() {
+        $(this).data('was-checked', this.checked);
+    });
+
+    $('.segmented-control label').on('mousedown touchstart', function() {
+        var inputId = $(this).attr('for');
+        var $input = $('#' + inputId);
+        $input.data('was-checked', $input.prop('checked'));
+    });
+
+    $('.segmented-control label').on('click', function(e) {
+        var inputId = $(this).attr('for');
+        var $input = $('#' + inputId);
+
+        if (!$input.prop('checked')) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        clearSelectedAssessment($input);
+    });
+
+    $('.segmented-control input[type="radio"]').on('click', function(e) {
+        if (!$(this).data('was-checked')) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        clearSelectedAssessment($(this));
     });
 
     // 2. Save state to localStorage on change
@@ -170,7 +212,7 @@ jQuery(document).ready(function($) {
             $('.segmented-control').each(function() {
                 var skillId = $(this).data('skill-id');
                 localStorage.removeItem(getSkillStorageKey(skillId));
-                $(this).find('input[value="none"]').prop('checked', true);
+                $(this).find('input[type="radio"]').prop('checked', false);
             });
             localStorage.removeItem(ASSESSMENT_NAME_KEY);
             localStorage.removeItem(ASSESSMENT_TARGET_KEY);
@@ -180,7 +222,7 @@ jQuery(document).ready(function($) {
 
     function getSelectedAssessment($control) {
         var $checked = $control.find('input[type="radio"]:checked').first();
-        return $checked.length ? $checked.val() : 'none';
+        return $checked.length ? $checked.val() : 'not-evaluated';
     }
 
     function buildPdfAssessment(value) {
@@ -201,6 +243,7 @@ jQuery(document).ready(function($) {
     function buildPdfLegend() {
         var $legend = $('<div class="pdf-report-legend"></div>');
         var legendItems = [
+            { value: 'not-evaluated', label: PDF_LEGEND_NOT_EVALUATED },
             { value: 'none', label: PDF_LEGEND_NONE },
             { value: 'partial', label: PDF_LEGEND_PARTIAL },
             { value: 'mastered', label: PDF_LEGEND_MASTERED }
@@ -296,7 +339,7 @@ jQuery(document).ready(function($) {
                 var $sourceTabEl = $sourceTabEls.eq(index);
                 var $cloneTabEl = $(this);
                 var hasAssessment = $sourceTabEl.find('.segmented-control').filter(function() {
-                    return getSelectedAssessment($(this)) !== 'none';
+                    return getSelectedAssessment($(this)) !== 'not-evaluated';
                 }).length > 0;
 
                 if (!hasAssessment) {
