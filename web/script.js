@@ -86,6 +86,7 @@ jQuery(document).ready(function($) {
     var PDF_PRINTABLE_HEIGHT_MM = 297 - PDF_MARGINS_MM.top - PDF_MARGINS_MM.bottom;
     var PDF_PAGE_HEIGHT_PX = Math.floor((PDF_PAGE_WIDTH_PX * PDF_PRINTABLE_HEIGHT_MM) / PDF_PRINTABLE_WIDTH_MM);
     var PDF_LOGO_FILENAME = 'QAMania_logo.png';
+    var PDF_FOOTER_LOGO_FILENAME = 'qamania_logo_name_report_footer.png';
     var pdfLogoAssetPromise = null;
     var $assessmentName = $('#assessment-name');
     var $assessmentTarget = $('#assessment-target-seniority');
@@ -94,6 +95,12 @@ jQuery(document).ready(function($) {
         var logoSrc = $('.headerTextContainer .logo').first().attr('src');
 
         return logoSrc ? logoSrc.replace(/[^/]+$/, PDF_LOGO_FILENAME) : '';
+    }
+
+    function getPdfFooterLogoSrc() {
+        var logoSrc = $('.headerTextContainer .logo').first().attr('src');
+
+        return logoSrc ? logoSrc.replace(/[^/]+$/, PDF_FOOTER_LOGO_FILENAME) : '';
     }
 
     function getSkillStorageKey(skillId) {
@@ -552,7 +559,7 @@ jQuery(document).ready(function($) {
 
     function getPdfLogoAsset() {
         if (!pdfLogoAssetPromise) {
-            var logoSrc = getPdfLogoSrc();
+            var logoSrc = getPdfFooterLogoSrc();
 
             pdfLogoAssetPromise = new Promise(function(resolve, reject) {
                 if (!logoSrc) {
@@ -636,11 +643,14 @@ jQuery(document).ready(function($) {
             );
 
             if (pageIndex > 0 && logoAsset) {
+                var footerLogoX = pdf.internal.pageSize.getWidth() - PDF_MARGINS_MM.right - footerLogoWidth;
+                var footerLogoY = pdf.internal.pageSize.getHeight() - PDF_MARGINS_MM.bottom + ((PDF_MARGINS_MM.bottom - footerLogoHeight) / 2);
+
                 pdf.addImage(
                     logoAsset.dataUrl,
                     'PNG',
-                    pdf.internal.pageSize.getWidth() - PDF_MARGINS_MM.right - footerLogoWidth,
-                    pdf.internal.pageSize.getHeight() - PDF_MARGINS_MM.bottom + ((PDF_MARGINS_MM.bottom - footerLogoHeight) / 2),
+                    footerLogoX,
+                    footerLogoY,
                     footerLogoWidth,
                     footerLogoHeight
                 );
