@@ -845,8 +845,9 @@ body.assessment-mode .assess-btn:hover {
 }
 
 .pdf-report-logo {
-  width: 150px;
-  height: auto;
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
   display: block;
   flex-shrink: 0;
 }

@@ -85,9 +85,16 @@ jQuery(document).ready(function($) {
     var PDF_PRINTABLE_WIDTH_MM = 210 - PDF_MARGINS_MM.left - PDF_MARGINS_MM.right;
     var PDF_PRINTABLE_HEIGHT_MM = 297 - PDF_MARGINS_MM.top - PDF_MARGINS_MM.bottom;
     var PDF_PAGE_HEIGHT_PX = Math.floor((PDF_PAGE_WIDTH_PX * PDF_PRINTABLE_HEIGHT_MM) / PDF_PRINTABLE_WIDTH_MM);
+    var PDF_LOGO_FILENAME = 'QAMania_logo.png';
     var pdfLogoAssetPromise = null;
     var $assessmentName = $('#assessment-name');
     var $assessmentTarget = $('#assessment-target-seniority');
+
+    function getPdfLogoSrc() {
+        var logoSrc = $('.headerTextContainer .logo').first().attr('src');
+
+        return logoSrc ? logoSrc.replace(/[^/]+$/, PDF_LOGO_FILENAME) : '';
+    }
 
     function getSkillStorageKey(skillId) {
         return 'skill_' + skillId;
@@ -289,7 +296,7 @@ jQuery(document).ready(function($) {
     }
 
     function buildPdfReportHeader() {
-        var logoSrc = $('.headerTextContainer .logo').first().attr('src');
+        var logoSrc = getPdfLogoSrc();
         var profile = getAssessmentProfile();
         var $header = $('<div class="pdf-report-header"></div>');
         var $headerTop = $('<div class="pdf-report-header-top"></div>');
@@ -545,7 +552,7 @@ jQuery(document).ready(function($) {
 
     function getPdfLogoAsset() {
         if (!pdfLogoAssetPromise) {
-            var logoSrc = $('.headerTextContainer .logo').first().attr('src');
+            var logoSrc = getPdfLogoSrc();
 
             pdfLogoAssetPromise = new Promise(function(resolve, reject) {
                 if (!logoSrc) {
